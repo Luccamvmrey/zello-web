@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zello — Divisão automática de pagamentos</title>
+    <meta
+      name="description"
+      content="Zello divide o pagamento entre o estabelecimento e cada profissional no momento da venda, com registro auditável de cada divisão."
+    />
+    <link rel="canonical" href="https://zello.com.br/" />
+
+    <meta name="theme-color" content="#f0f2ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b2b22" media="(prefers-color-scheme: dark)" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content="Zello" />
+    <meta property="og:url" content="https://zello.com.br/" />
+    <meta property="og:title" content="Zello — Divisão automática de pagamentos" />
+    <meta
+      property="og:description"
+      content="Zello divide o pagamento entre o estabelecimento e cada profissional no momento da venda, com registro auditável de cada divisão."
+    />
+    <meta property="og:image" content="https://zello.com.br/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Zello — Divisão automática de pagamentos" />
+    <meta
+      name="twitter:description"
+      content="Zello divide o pagamento entre o estabelecimento e cada profissional no momento da venda, com registro auditável de cada divisão."
+    />
+    <meta name="twitter:image" content="https://zello.com.br/og.png" />
+
+    <script>
+      // Applies the stored/preferred theme before first paint so dark-mode
+      // visitors never see a flash of the light paper background.
+      ;(function () {
+        try {
+          var stored = localStorage.getItem("zello-theme")
+          var dark =
+            stored === "dark" ||
+            (!stored &&
+              window.matchMedia("(prefers-color-scheme: dark)").matches)
+          if (dark) document.documentElement.classList.add("dark")
+        } catch (e) {}
+      })()
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

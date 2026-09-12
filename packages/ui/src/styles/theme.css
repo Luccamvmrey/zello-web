@@ -1,0 +1,67 @@
+/* Shared Zello design tokens. Import after the shadcn base theme so these
+   values override the generated defaults, e.g.:
+   @import "@repo/ui/styles/theme.css"; */
+
+@theme inline {
+  --color-highlight: var(--highlight);
+  --color-highlight-foreground: var(--highlight-foreground);
+}
+
+:root {
+  --background: #f0f2ee;
+  --foreground: #1b2b22;
+
+  --card: #f0f2ee;
+  --card-foreground: #1b2b22;
+  --popover: #f0f2ee;
+  --popover-foreground: #1b2b22;
+
+  --primary: #2f5233;
+  --primary-foreground: #f0f2ee;
+
+  --secondary: #e2e6dc;
+  --secondary-foreground: #1b2b22;
+
+  --muted: #e2e6dc;
+  --muted-foreground: #4a5a4e;
+
+  --accent: #e2e6dc;
+  --accent-foreground: #1b2b22;
+
+  --border: #d5dacc;
+  --input: #d5dacc;
+  --ring: #2f5233;
+
+  /* Destaque/números */
+  --highlight: #b08d3e;
+  --highlight-foreground: #1b2b22;
+}
+
+.dark {
+  --background: #1b2b22;
+  --foreground: #f0f2ee;
+
+  --card: #22342a;
+  --card-foreground: #f0f2ee;
+  --popover: #22342a;
+  --popover-foreground: #f0f2ee;
+
+  --primary: #2f5233;
+  --primary-foreground: #f0f2ee;
+
+  --secondary: #2c3f31;
+  --secondary-foreground: #f0f2ee;
+
+  --muted: #2c3f31;
+  --muted-foreground: #b7c2b8;
+
+  --accent: #2c3f31;
+  --accent-foreground: #f0f2ee;
+
+  --border: #31463a;
+  --input: #31463a;
+  --ring: #b08d3e;
+
+  --highlight: #b08d3e;
+  --highlight-foreground: #1b2b22;
+}
