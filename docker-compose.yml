@@ -1,0 +1,25 @@
+# Postgres local para desenvolvimento. Em produção o banco é self-hosted (VM).
+# Sobe com: docker compose up -d
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: zello-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: zello
+      POSTGRES_PASSWORD: zello
+      POSTGRES_DB: zello
+    ports:
+      # 5434 no host: 5432 (Postgres nativo) e 5433 (outro container) já estão em uso.
+      - '5434:5432'
+    volumes:
+      - zello-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      # Sem o healthcheck o `prisma migrate` roda antes do banco aceitar conexão.
+      test: ['CMD-SHELL', 'pg_isready -U zello -d zello']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  zello-pgdata:

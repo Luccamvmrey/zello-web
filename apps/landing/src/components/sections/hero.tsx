@@ -1,6 +1,7 @@
 import { ShieldCheck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { SectionContainer } from "@/components/section-container"
+import { registerUrl } from "@/lib/urls"
 import { cn } from "@/lib/utils"
 
 function Hero() {
@@ -32,7 +33,11 @@ function Hero() {
           </p>
 
           <div className="flex flex-col items-stretch gap-3 self-stretch sm:flex-row sm:items-center sm:self-auto">
-            <Button render={<a href="#cta" />} nativeButton={false} size="xl">
+            <Button
+              render={<a href={registerUrl} />}
+              nativeButton={false}
+              size="xl"
+            >
               Criar conta
             </Button>
             <Button

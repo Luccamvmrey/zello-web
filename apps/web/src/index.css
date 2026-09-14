@@ -2,6 +2,8 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 @import "@fontsource-variable/geist";
+/* Single source of truth for the brand palette. Anything it defines
+   (--background, --primary, --highlight, ...) must NOT be redeclared below. */
 @import "@repo/ui/styles/theme.css";
 
 @custom-variant dark (&:is(.dark *));
@@ -49,73 +51,47 @@
     --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/* Only tokens the shared brand theme does NOT define.
+   The sidebar is the dark counterweight to the paper background: it reuses
+   the brand theme's dark-mode values so both themes stay in the same family. */
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
     --destructive: oklch(0.577 0.245 27.325);
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
+
+    --chart-1: #2f5233;
+    --chart-2: #b08d3e;
+    --chart-3: #4a5a4e;
+    --chart-4: #7d9a80;
+    --chart-5: #d5dacc;
+
     --radius: 0.625rem;
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+
+    --sidebar: #1b2b22;
+    --sidebar-foreground: #f0f2ee;
+    --sidebar-primary: #2f5233;
+    --sidebar-primary-foreground: #f0f2ee;
+    --sidebar-accent: #2c3f31;
+    --sidebar-accent-foreground: #f0f2ee;
+    --sidebar-border: #31463a;
+    --sidebar-ring: #b08d3e;
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
     --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+
+    --chart-1: #7d9a80;
+    --chart-2: #b08d3e;
+    --chart-3: #b7c2b8;
+    --chart-4: #4a5a4e;
+    --chart-5: #31463a;
+
+    --sidebar: #16221b;
+    --sidebar-foreground: #f0f2ee;
+    --sidebar-primary: #2f5233;
+    --sidebar-primary-foreground: #f0f2ee;
+    --sidebar-accent: #2c3f31;
+    --sidebar-accent-foreground: #f0f2ee;
+    --sidebar-border: #31463a;
+    --sidebar-ring: #b08d3e;
 }
 
 @layer base {
@@ -127,5 +103,10 @@
     }
   html {
     @apply font-sans;
+    }
+  /* Valores monetários e contagens: algarismos tabulares, conforme a
+     direção de design do projeto (precisão de livro-razão). */
+  .tabular {
+    font-variant-numeric: tabular-nums;
     }
 }

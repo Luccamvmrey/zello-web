@@ -2,6 +2,7 @@ import { BrandMark } from "@/components/brand-mark"
 import { SectionContainer } from "@/components/section-container"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { Button } from "@/components/ui/button"
+import { registerUrl } from "@/lib/urls"
 
 const navLinks = [
   { label: "Como funciona", href: "#como-funciona" },
@@ -34,7 +35,11 @@ function SiteHeader() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button render={<a href="#cta" />} nativeButton={false} size="sm">
+          <Button
+            render={<a href={registerUrl} />}
+            nativeButton={false}
+            size="sm"
+          >
             Criar conta
           </Button>
         </div>

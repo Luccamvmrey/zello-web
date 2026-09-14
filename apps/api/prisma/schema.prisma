@@ -1,13 +1,257 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+// Zello — schema da Camada 0 (fundação).
+// Prisma 7: a URL do datasource vem do prisma.config.ts, não de env() aqui.
 
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "esm"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+enum DocumentType {
+  CPF
+  CNPJ
+}
+
+enum OnboardingStatus {
+  PENDING
+  INVITED
+  LINKED
+  ACTIVE
+}
+
+enum SplitRuleType {
+  PERCENTAGE
+  FIXED
+}
+
+enum TerminalStatus {
+  PAIRED
+  UNPAIRED
+  OFFLINE
+}
+
+enum PaymentMethod {
+  CREDIT
+  DEBIT
+  PIX
+}
+
+enum SaleStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  FAILED
+}
+
+/// Quem faz login. O Establishment é criado depois, no onboarding.
+model User {
+  id           String  @id @default(uuid()) @db.Uuid
+  email        String  @unique
+  passwordHash String
+  name         String
+
+  /// 1:1 por ora. Para virar multi-tenant (1:N), basta remover o @unique.
+  establishmentId String?        @unique @db.Uuid
+  establishment   Establishment? @relation(fields: [establishmentId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+model Establishment {
+  id            String @id @default(uuid()) @db.Uuid
+  cnpj          String @unique
+  nomeFantasia  String
+  razaoSocial   String
+  segmento      String
+
+  /// Faturamento mensal estimado.
+  faturamento          Decimal? @db.Decimal(12, 2)
+  /// Percentual médio de encargos tributários.
+  encargosTributarios  Decimal? @db.Decimal(5, 2)
+
+  numPdvs   Int     @default(1)
+  /// Campo livre no MVP — sem decomposição em logradouro/número/etc.
+  endereco  String?
+
+  /// Preenchido quando a integração com a Stone for ativada.
+  stoneAccountId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user             User?
+  collaborators    Collaborator[]
+  splitRules       SplitRule[]
+  services         Service[]
+  logicalTerminals LogicalTerminal[]
+  sales            Sale[]
+
+  @@map("establishments")
+}
+
+model Collaborator {
+  id              String        @id @default(uuid()) @db.Uuid
+  establishmentId String        @db.Uuid
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+
+  name  String
+  email String
+  phone String?
+
+  /// CPF ou CNPJ — o tipo é declarado em documentType.
+  document     String
+  documentType DocumentType
+
+  /// Preenchido após o OAuth com a Stone — nunca é input manual.
+  stoneRecebedorId String?
+
+  onboardingStatus OnboardingStatus @default(PENDING)
+  active           Boolean          @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  saleSplits SaleSplit[]
+
+  @@unique([establishmentId, document])
+  @@index([establishmentId])
+  @@map("collaborators")
+}
+
+model SplitRule {
+  id              String        @id @default(uuid()) @db.Uuid
+  establishmentId String        @db.Uuid
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+
+  name String
+  type SplitRuleType
+
+  /// PERCENTAGE: 0-100, parte que vai para o COLABORADOR.
+  /// FIXED: valor em reais que o ESTABELECIMENTO retém.
+  value Decimal @db.Decimal(12, 2)
+
+  description String?
+  active      Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  saleSplits SaleSplit[]
+
+  @@index([establishmentId])
+  @@map("split_rules")
+}
+
+model Service {
+  id              String        @id @default(uuid()) @db.Uuid
+  establishmentId String        @db.Uuid
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+
+  name String
+  /// Valor sugerido — o operador pode alterar no terminal.
+  price  Decimal @db.Decimal(12, 2)
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([establishmentId])
+  @@map("services")
+}
+
+model LogicalTerminal {
+  id              String        @id @default(uuid()) @db.Uuid
+  establishmentId String        @db.Uuid
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+
+  name   String
+  active Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  physicalTerminals PhysicalTerminal[]
+  sales             Sale[]
+
+  @@index([establishmentId])
+  @@map("logical_terminals")
+}
+
+model PhysicalTerminal {
+  id                String          @id @default(uuid()) @db.Uuid
+  logicalTerminalId String          @db.Uuid
+  logicalTerminal   LogicalTerminal @relation(fields: [logicalTerminalId], references: [id], onDelete: Cascade)
+
+  /// Nº de série da maquininha Stone vinculada via Connect Split.
+  /// Único global: uma maquininha só pode estar em um terminal.
+  machineSerial String  @unique
+  /// Nome de referência do computador (ex: "PC balcão").
+  deviceName    String?
+
+  status     TerminalStatus @default(UNPAIRED)
+  lastSeenAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([logicalTerminalId])
+  @@map("physical_terminals")
+}
+
+model Sale {
+  id              String        @id @default(uuid()) @db.Uuid
+  establishmentId String        @db.Uuid
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+
+  logicalTerminalId String          @db.Uuid
+  logicalTerminal   LogicalTerminal @relation(fields: [logicalTerminalId], references: [id], onDelete: Restrict)
+
+  paymentMethod PaymentMethod
+  totalAmount   Decimal       @db.Decimal(12, 2)
+  status        SaleStatus    @default(PENDING)
+
+  /// ID do pedido no Connect Split.
+  stoneOrderId       String?
+  /// ID da transação confirmada.
+  stoneTransactionId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  splits SaleSplit[]
+
+  @@index([establishmentId])
+  @@index([logicalTerminalId])
+  @@map("sales")
+}
+
+/// Participação de cada colaborador numa venda.
+/// O schema suporta N colaboradores por venda desde já; a limitação a 1
+/// no MVP vive apenas na UI do terminal, não aqui nem na API.
+model SaleSplit {
+  id     String @id @default(uuid()) @db.Uuid
+  saleId String @db.Uuid
+  sale   Sale   @relation(fields: [saleId], references: [id], onDelete: Cascade)
+
+  collaboratorId String       @db.Uuid
+  collaborator   Collaborator @relation(fields: [collaboratorId], references: [id], onDelete: Restrict)
+
+  splitRuleId String    @db.Uuid
+  splitRule   SplitRule @relation(fields: [splitRuleId], references: [id], onDelete: Restrict)
+
+  /// Valor que vai para o colaborador nesta venda.
+  amount Decimal @db.Decimal(12, 2)
+
+  createdAt DateTime @default(now())
+
+  @@index([saleId])
+  @@index([collaboratorId])
+  @@map("sale_splits")
 }

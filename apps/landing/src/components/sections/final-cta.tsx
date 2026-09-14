@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { SectionContainer } from "@/components/section-container"
+import { registerUrl } from "@/lib/urls"
 
 function FinalCta() {
   return (
@@ -13,7 +14,7 @@ function FinalCta() {
           venda, com registro auditável de cada centavo.
         </p>
         <Button
-          render={<a href="#" />}
+          render={<a href={registerUrl} />}
           nativeButton={false}
           size="xl"
           className="mt-2 bg-background text-foreground hover:bg-background/90"
