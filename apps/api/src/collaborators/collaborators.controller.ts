@@ -49,4 +49,12 @@ export class CollaboratorsController {
   remove(@CurrentEstablishment() establishmentId: string, @Param('id') id: string): Promise<void> {
     return this.collaboratorsService.remove(establishmentId, id);
   }
+
+  @Patch(':id/reactivate')
+  reactivate(
+    @CurrentEstablishment() establishmentId: string,
+    @Param('id') id: string,
+  ): Promise<Collaborator> {
+    return this.collaboratorsService.reactivate(establishmentId, id);
+  }
 }

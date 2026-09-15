@@ -60,3 +60,15 @@ export function useDeleteSplitRule() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: splitRuleKeys.all }),
   })
 }
+
+export function useReactivateSplitRule() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (id: string): Promise<SplitRule> => {
+      const { data } = await api.patch<SplitRule>(`/split-rules/${id}/reactivate`)
+      return data
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: splitRuleKeys.all }),
+  })
+}

@@ -107,6 +107,13 @@ export function formatPercentage(value: number): string {
   return `${value}%`
 }
 
+/** Formata data e hora no padrão brasileiro (ex.: "15/09/2026 14:30"). */
+export function formatDateTime(value: string): string {
+  return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).format(
+    new Date(value),
+  )
+}
+
 /**
  * Handler de submit inválido do react-hook-form: rola o primeiro campo com
  * erro até o centro da tela. Sem isso, um formulário longo pode "não fazer

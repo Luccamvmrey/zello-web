@@ -187,6 +187,7 @@ model LogicalTerminal {
   physicalTerminals PhysicalTerminal[]
   sales             Sale[]
 
+  @@unique([establishmentId, name])
   @@index([establishmentId])
   @@map("logical_terminals")
 }

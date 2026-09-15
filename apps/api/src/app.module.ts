@@ -11,6 +11,7 @@ import { EstablishmentsModule } from './establishments/establishments.module.js'
 import { PrismaModule } from './prisma/prisma.module.js';
 import { ServicesModule } from './services/services.module.js';
 import { SplitRulesModule } from './split-rules/split-rules.module.js';
+import { TerminalsModule } from './terminals/terminals.module.js';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { SplitRulesModule } from './split-rules/split-rules.module.js';
     CollaboratorsModule,
     SplitRulesModule,
     ServicesModule,
+    TerminalsModule,
   ],
   controllers: [AppController],
   providers: [

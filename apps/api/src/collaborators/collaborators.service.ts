@@ -101,6 +101,17 @@ export class CollaboratorsService {
     });
   }
 
+  async reactivate(establishmentId: string, id: string): Promise<Collaborator> {
+    await this.findOne(establishmentId, id);
+
+    const collaborator = await this.prisma.collaborator.update({
+      where: { id },
+      data: { active: true },
+    });
+
+    return toCollaborator(collaborator);
+  }
+
   private async assertDocumentAvailable(establishmentId: string, document: string): Promise<void> {
     const existing = await this.prisma.collaborator.findUnique({
       where: { establishmentId_document: { establishmentId, document } },

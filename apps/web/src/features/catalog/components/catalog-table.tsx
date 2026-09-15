@@ -1,4 +1,4 @@
-import { BanIcon, PencilIcon } from 'lucide-react'
+import { BanIcon, PencilIcon, RotateCcwIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { Service } from '@repo/types'
@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTable, type DataTableColumn } from '@/components/data-table'
 import { apiErrorMessage } from '@/lib/api'
-import { useDeleteService } from '@/lib/queries/services'
+import { useDeleteService, useReactivateService } from '@/lib/queries/services'
 import { formatBRL } from '@/lib/utils'
 import { ServiceFormDialog } from './service-form-dialog'
 
@@ -21,6 +21,7 @@ export function CatalogTable({ data, isLoading, emptyState }: CatalogTableProps)
   const [editing, setEditing] = useState<Service | null>(null)
   const [deactivating, setDeactivating] = useState<Service | null>(null)
   const deleteService = useDeleteService()
+  const reactivateService = useReactivateService()
 
   async function handleConfirmDeactivate() {
     if (!deactivating) return
@@ -31,6 +32,15 @@ export function CatalogTable({ data, isLoading, emptyState }: CatalogTableProps)
       setDeactivating(null)
     } catch (err) {
       toast.error(apiErrorMessage(err, 'Não foi possível desativar o serviço.'))
+    }
+  }
+
+  async function handleReactivate(service: Service) {
+    try {
+      await reactivateService.mutateAsync(service.id)
+      toast.success('Serviço reativado.')
+    } catch (err) {
+      toast.error(apiErrorMessage(err, 'Não foi possível reativar o serviço.'))
     }
   }
 
@@ -68,7 +78,17 @@ export function CatalogTable({ data, isLoading, emptyState }: CatalogTableProps)
               </TooltipTrigger>
               <TooltipContent>Desativar</TooltipContent>
             </Tooltip>
-          ) : null}
+          ) : (
+            <Tooltip>
+              <TooltipTrigger
+                render={<Button variant="ghost" size="icon-sm" aria-label="Reativar serviço" />}
+                onClick={() => handleReactivate(s)}
+              >
+                <RotateCcwIcon />
+              </TooltipTrigger>
+              <TooltipContent>Reativar</TooltipContent>
+            </Tooltip>
+          )}
         </div>
       ),
     },

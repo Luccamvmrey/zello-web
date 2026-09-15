@@ -1,19 +1,5 @@
-import {
-  Monitor,
-  Receipt,
-} from 'lucide-react'
+import { Receipt } from 'lucide-react'
 import { PlaceholderPage } from './placeholder'
-
-export function TerminalsPage() {
-  return (
-    <PlaceholderPage
-      title="Terminais"
-      description="Pontos de venda e maquininhas vinculadas."
-      icon={Monitor}
-      upcoming="Aqui você vai vincular cada maquininha ao estabelecimento e acompanhar quais estão ativas."
-    />
-  )
-}
 
 export function SalesPage() {
   return (

@@ -49,4 +49,12 @@ export class SplitRulesController {
   remove(@CurrentEstablishment() establishmentId: string, @Param('id') id: string): Promise<void> {
     return this.splitRulesService.remove(establishmentId, id);
   }
+
+  @Patch(':id/reactivate')
+  reactivate(
+    @CurrentEstablishment() establishmentId: string,
+    @Param('id') id: string,
+  ): Promise<SplitRule> {
+    return this.splitRulesService.reactivate(establishmentId, id);
+  }
 }

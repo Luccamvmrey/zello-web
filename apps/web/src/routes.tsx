@@ -7,10 +7,12 @@ import { RegisterPage } from '@/pages/register'
 import { OnboardingPage } from '@/pages/onboarding'
 import { DashboardPage } from '@/pages/dashboard'
 import { SettingsPage } from '@/pages/settings'
-import { SalesPage, TerminalsPage } from '@/pages/sections'
+import { SalesPage } from '@/pages/sections'
 import { CollaboratorsPage } from '@/features/collaborators/pages/collaborators-page'
 import { RulesPage } from '@/features/rules/pages/rules-page'
 import { CatalogPage } from '@/features/catalog/pages/catalog-page'
+import { TerminalsPage } from '@/features/terminals/pages/terminals-page'
+import { TerminalDetailPage } from '@/features/terminals/pages/terminal-detail-page'
 
 export const router = createBrowserRouter([
   {
@@ -33,6 +35,7 @@ export const router = createBrowserRouter([
       { path: '/rules', element: <RulesPage /> },
       { path: '/catalog', element: <CatalogPage /> },
       { path: '/terminals', element: <TerminalsPage /> },
+      { path: '/terminals/:id', element: <TerminalDetailPage /> },
       { path: '/sales', element: <SalesPage /> },
       { path: '/settings', element: <SettingsPage /> },
     ],

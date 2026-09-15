@@ -60,3 +60,15 @@ export function useDeleteService() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: serviceKeys.all }),
   })
 }
+
+export function useReactivateService() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (id: string): Promise<Service> => {
+      const { data } = await api.patch<Service>(`/services/${id}/reactivate`)
+      return data
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: serviceKeys.all }),
+  })
+}

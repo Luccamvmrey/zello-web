@@ -1,4 +1,4 @@
-import { BanIcon, PencilIcon } from 'lucide-react'
+import { BanIcon, PencilIcon, RotateCcwIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { SplitRule } from '@repo/types'
@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTable, type DataTableColumn } from '@/components/data-table'
 import { apiErrorMessage } from '@/lib/api'
-import { useDeleteSplitRule } from '@/lib/queries/split-rules'
+import { useDeleteSplitRule, useReactivateSplitRule } from '@/lib/queries/split-rules'
 import { formatBRL, formatPercentage } from '@/lib/utils'
 import { RuleFormDialog } from './rule-form-dialog'
 import { TYPE_BADGE } from './rule-type-badge'
@@ -23,6 +23,7 @@ export function RulesTable({ data, isLoading, emptyState }: RulesTableProps) {
   const [editing, setEditing] = useState<SplitRule | null>(null)
   const [deactivating, setDeactivating] = useState<SplitRule | null>(null)
   const deleteSplitRule = useDeleteSplitRule()
+  const reactivateSplitRule = useReactivateSplitRule()
 
   async function handleConfirmDeactivate() {
     if (!deactivating) return
@@ -33,6 +34,15 @@ export function RulesTable({ data, isLoading, emptyState }: RulesTableProps) {
       setDeactivating(null)
     } catch (err) {
       toast.error(apiErrorMessage(err, 'Não foi possível desativar a regra.'))
+    }
+  }
+
+  async function handleReactivate(rule: SplitRule) {
+    try {
+      await reactivateSplitRule.mutateAsync(rule.id)
+      toast.success('Regra reativada.')
+    } catch (err) {
+      toast.error(apiErrorMessage(err, 'Não foi possível reativar a regra.'))
     }
   }
 
@@ -82,7 +92,17 @@ export function RulesTable({ data, isLoading, emptyState }: RulesTableProps) {
               </TooltipTrigger>
               <TooltipContent>Desativar</TooltipContent>
             </Tooltip>
-          ) : null}
+          ) : (
+            <Tooltip>
+              <TooltipTrigger
+                render={<Button variant="ghost" size="icon-sm" aria-label="Reativar regra" />}
+                onClick={() => handleReactivate(r)}
+              >
+                <RotateCcwIcon />
+              </TooltipTrigger>
+              <TooltipContent>Reativar</TooltipContent>
+            </Tooltip>
+          )}
         </div>
       ),
     },

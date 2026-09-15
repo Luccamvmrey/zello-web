@@ -49,4 +49,12 @@ export class ServicesController {
   remove(@CurrentEstablishment() establishmentId: string, @Param('id') id: string): Promise<void> {
     return this.servicesService.remove(establishmentId, id);
   }
+
+  @Patch(':id/reactivate')
+  reactivate(
+    @CurrentEstablishment() establishmentId: string,
+    @Param('id') id: string,
+  ): Promise<Service> {
+    return this.servicesService.reactivate(establishmentId, id);
+  }
 }

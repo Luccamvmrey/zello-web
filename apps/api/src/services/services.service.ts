@@ -79,4 +79,15 @@ export class ServicesService {
       data: { active: false },
     });
   }
+
+  async reactivate(establishmentId: string, id: string): Promise<Service> {
+    await this.findOne(establishmentId, id);
+
+    const service = await this.prisma.service.update({
+      where: { id },
+      data: { active: true },
+    });
+
+    return toService(service);
+  }
 }

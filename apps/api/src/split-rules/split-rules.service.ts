@@ -90,6 +90,17 @@ export class SplitRulesService {
     });
   }
 
+  async reactivate(establishmentId: string, id: string): Promise<SplitRule> {
+    await this.findOne(establishmentId, id);
+
+    const splitRule = await this.prisma.splitRule.update({
+      where: { id },
+      data: { active: true },
+    });
+
+    return toSplitRule(splitRule);
+  }
+
   private async assertNameAvailable(
     establishmentId: string,
     name: string,

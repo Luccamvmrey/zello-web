@@ -60,3 +60,15 @@ export function useDeleteCollaborator() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: collaboratorKeys.all }),
   })
 }
+
+export function useReactivateCollaborator() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (id: string): Promise<Collaborator> => {
+      const { data } = await api.patch<Collaborator>(`/collaborators/${id}/reactivate`)
+      return data
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: collaboratorKeys.all }),
+  })
+}

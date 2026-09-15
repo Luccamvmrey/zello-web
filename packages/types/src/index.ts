@@ -177,3 +177,36 @@ export interface CreateServiceDto {
 }
 
 export type UpdateServiceDto = Partial<CreateServiceDto>;
+
+/* ------------------------------------------------------------- terminals */
+
+export interface LogicalTerminal {
+  id: string;
+  establishmentId: string;
+  name: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface LogicalTerminalWithCount extends LogicalTerminal {
+  physicalTerminalCount: number;
+}
+
+export interface PhysicalTerminalSummary {
+  id: string;
+  machineSerial: string;
+  deviceName: string | null;
+  status: TerminalStatus;
+  lastSeenAt: string | null;
+}
+
+export interface LogicalTerminalDetail extends LogicalTerminal {
+  physicalTerminals: PhysicalTerminalSummary[];
+}
+
+export interface CreateTerminalDto {
+  name: string;
+}
+
+export type UpdateTerminalDto = Partial<CreateTerminalDto>;

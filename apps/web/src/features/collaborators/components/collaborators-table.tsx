@@ -1,4 +1,4 @@
-import { PencilIcon, UserXIcon } from 'lucide-react'
+import { PencilIcon, RotateCcwIcon, UserXIcon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import type { Collaborator } from '@repo/types'
@@ -8,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { ConfirmDialog } from '@/components/confirm-dialog'
 import { DataTable, type DataTableColumn } from '@/components/data-table'
 import { apiErrorMessage } from '@/lib/api'
-import { useDeleteCollaborator } from '@/lib/queries/collaborators'
+import { useDeleteCollaborator, useReactivateCollaborator } from '@/lib/queries/collaborators'
 import { formatDocument } from '@/lib/utils'
 import { CollaboratorFormDialog } from './collaborator-form-dialog'
 import { STATUS_BADGE } from './status-badge'
@@ -23,6 +23,7 @@ export function CollaboratorsTable({ data, isLoading, emptyState }: Collaborator
   const [editing, setEditing] = useState<Collaborator | null>(null)
   const [deactivating, setDeactivating] = useState<Collaborator | null>(null)
   const deleteCollaborator = useDeleteCollaborator()
+  const reactivateCollaborator = useReactivateCollaborator()
 
   async function handleConfirmDeactivate() {
     if (!deactivating) return
@@ -33,6 +34,15 @@ export function CollaboratorsTable({ data, isLoading, emptyState }: Collaborator
       setDeactivating(null)
     } catch (err) {
       toast.error(apiErrorMessage(err, 'Não foi possível desativar o colaborador.'))
+    }
+  }
+
+  async function handleReactivate(collaborator: Collaborator) {
+    try {
+      await reactivateCollaborator.mutateAsync(collaborator.id)
+      toast.success('Colaborador reativado.')
+    } catch (err) {
+      toast.error(apiErrorMessage(err, 'Não foi possível reativar o colaborador.'))
     }
   }
 
@@ -82,7 +92,19 @@ export function CollaboratorsTable({ data, isLoading, emptyState }: Collaborator
               </TooltipTrigger>
               <TooltipContent>Desativar</TooltipContent>
             </Tooltip>
-          ) : null}
+          ) : (
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button variant="ghost" size="icon-sm" aria-label="Reativar colaborador" />
+                }
+                onClick={() => handleReactivate(c)}
+              >
+                <RotateCcwIcon />
+              </TooltipTrigger>
+              <TooltipContent>Reativar</TooltipContent>
+            </Tooltip>
+          )}
         </div>
       ),
     },
