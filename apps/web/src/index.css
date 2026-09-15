@@ -27,7 +27,16 @@
     --color-ring: var(--ring);
     --color-input: var(--input);
     --color-border: var(--border);
+    --color-border-subtle: var(--border-subtle);
+    --color-surface-sunken: var(--surface-sunken);
     --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --shadow-raised: var(--elevation-raised);
+    --shadow-overlay: var(--elevation-overlay);
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
     --color-muted-foreground: var(--muted-foreground);
@@ -55,8 +64,6 @@
    The sidebar is the dark counterweight to the paper background: it reuses
    the brand theme's dark-mode values so both themes stay in the same family. */
 :root {
-    --destructive: oklch(0.577 0.245 27.325);
-
     --chart-1: #2f5233;
     --chart-2: #b08d3e;
     --chart-3: #4a5a4e;
@@ -69,15 +76,16 @@
     --sidebar-foreground: #f0f2ee;
     --sidebar-primary: #2f5233;
     --sidebar-primary-foreground: #f0f2ee;
-    --sidebar-accent: #2c3f31;
+    /* Era #2c3f31 — apenas 1.32:1 contra --sidebar, o que tornava o item
+       ativo indistinguível dos inativos. Este tom dá 2.54:1 e é reforçado
+       por uma barra dourada de 2px no AppSidebar. */
+    --sidebar-accent: #4e6c55;
     --sidebar-accent-foreground: #f0f2ee;
     --sidebar-border: #31463a;
     --sidebar-ring: #b08d3e;
 }
 
 .dark {
-    --destructive: oklch(0.704 0.191 22.216);
-
     --chart-1: #7d9a80;
     --chart-2: #b08d3e;
     --chart-3: #b7c2b8;
@@ -88,7 +96,7 @@
     --sidebar-foreground: #f0f2ee;
     --sidebar-primary: #2f5233;
     --sidebar-primary-foreground: #f0f2ee;
-    --sidebar-accent: #2c3f31;
+    --sidebar-accent: #496650;
     --sidebar-accent-foreground: #f0f2ee;
     --sidebar-border: #31463a;
     --sidebar-ring: #b08d3e;

@@ -77,8 +77,14 @@ model Establishment {
   encargosTributarios  Decimal? @db.Decimal(5, 2)
 
   numPdvs   Int     @default(1)
-  /// Campo livre no MVP — sem decomposição em logradouro/número/etc.
-  endereco  String?
+
+  cep          String? @db.VarChar(8)
+  logradouro   String?
+  numero       String?
+  complemento  String?
+  bairro       String?
+  cidade       String?
+  estado       String? @db.VarChar(2)
 
   /// Preenchido quando a integração com a Stone for ativada.
   stoneAccountId String?
@@ -145,6 +151,7 @@ model SplitRule {
 
   saleSplits SaleSplit[]
 
+  @@unique([establishmentId, name])
   @@index([establishmentId])
   @@map("split_rules")
 }

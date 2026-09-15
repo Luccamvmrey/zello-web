@@ -34,6 +34,8 @@ export function LoginPage() {
 
   return (
     <div>
+      {/* design-contract-allow C3: tela pública, moldura do AuthLayout. A régua
+          e o tique do PageHeader pertencem ao painel, não a um cartão centrado. */}
       <h1 className="text-2xl font-semibold tracking-tight">Entrar</h1>
       <p className="text-muted-foreground mt-1 text-sm">
         Acesse o painel do seu estabelecimento.

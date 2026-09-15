@@ -117,8 +117,9 @@
   --secondary-foreground: #f0f2ee;
   --accent: #2c3f31;
   --accent-foreground: #f0f2ee;
-  --border: #31463a;
-  --input: #31463a;
+  --border: #3d5646;
+  --border-subtle: #31463a;
+  --input: #3d5646;
   --ring: #b08d3e;
   @apply bg-background text-foreground;
 }
@@ -126,7 +127,8 @@
 .dark .surface-inverted {
   --background: #22342a;
   --card: #2c3f31;
-  --border: #3a5144;
+  --border: #46604f;
+  --border-subtle: #3a5144;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -188,12 +190,14 @@
   }
 }
 
-/* Ruled-paper texture for the hero, drawn from the border token. */
+/* Ruled-paper texture for the hero. Uses --border-subtle on purpose: this is
+   decoration, and the faintness is the point. --border is the structural
+   token and is deliberately darker (it has to clear 3:1). */
 .ledger-paper {
   background-image: repeating-linear-gradient(
     to bottom,
-    var(--border) 0,
-    var(--border) 1px,
+    var(--border-subtle) 0,
+    var(--border-subtle) 1px,
     transparent 1px,
     transparent 2rem
   );

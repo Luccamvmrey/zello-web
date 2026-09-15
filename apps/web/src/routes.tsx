@@ -1,17 +1,15 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { AuthLayout } from '@/layouts/auth-layout'
 import { AuthenticatedLayout } from '@/layouts/authenticated-layout'
+import { OnboardingLayout } from '@/layouts/onboarding-layout'
 import { LoginPage } from '@/pages/login'
 import { RegisterPage } from '@/pages/register'
-import {
-  CatalogPage,
-  CollaboratorsPage,
-  DashboardPage,
-  RulesPage,
-  SalesPage,
-  SettingsPage,
-  TerminalsPage,
-} from '@/pages/sections'
+import { OnboardingPage } from '@/pages/onboarding'
+import { DashboardPage } from '@/pages/dashboard'
+import { SettingsPage } from '@/pages/settings'
+import { CatalogPage, SalesPage, TerminalsPage } from '@/pages/sections'
+import { CollaboratorsPage } from '@/features/collaborators/pages/collaborators-page'
+import { RulesPage } from '@/features/rules/pages/rules-page'
 
 export const router = createBrowserRouter([
   {
@@ -20,6 +18,10 @@ export const router = createBrowserRouter([
       { path: '/login', element: <LoginPage /> },
       { path: '/register', element: <RegisterPage /> },
     ],
+  },
+  {
+    element: <OnboardingLayout />,
+    children: [{ path: '/onboarding', element: <OnboardingPage /> }],
   },
   {
     element: <AuthenticatedLayout />,

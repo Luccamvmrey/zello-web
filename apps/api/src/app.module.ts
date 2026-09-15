@@ -5,13 +5,21 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
 import { JwtAuthGuard } from './auth/jwt-auth.guard.js';
+import { CollaboratorsModule } from './collaborators/collaborators.module.js';
+import { CommonModule } from './common/common.module.js';
+import { EstablishmentsModule } from './establishments/establishments.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { SplitRulesModule } from './split-rules/split-rules.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     PrismaModule,
+    CommonModule,
     AuthModule,
+    EstablishmentsModule,
+    CollaboratorsModule,
+    SplitRulesModule,
   ],
   controllers: [AppController],
   providers: [

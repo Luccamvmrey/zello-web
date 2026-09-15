@@ -1,9 +1,13 @@
 import type { LucideIcon } from 'lucide-react'
+import { EmptyState } from '@/components/empty-state'
+import { PageHeader } from '@/components/page-header'
 
 interface PlaceholderPageProps {
   title: string
   description: string
   icon: LucideIcon
+  /** O que a tela vai permitir fazer. Uma caixa vazia sem isto não informa nada. */
+  upcoming: string
 }
 
 /**
@@ -14,15 +18,14 @@ export function PlaceholderPage({
   title,
   description,
   icon: Icon,
+  upcoming,
 }: PlaceholderPageProps) {
   return (
     <section>
-      <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-      <p className="text-muted-foreground mt-1 text-sm">{description}</p>
+      <PageHeader title={title} description={description} />
 
-      <div className="border-border mt-8 flex flex-col items-center gap-3 rounded-lg border border-dashed px-6 py-16 text-center">
-        <Icon className="text-muted-foreground size-8" aria-hidden="true" />
-        <p className="text-muted-foreground text-sm">Em construção</p>
+      <div className="border-border-subtle mt-8 rounded-xl border border-dashed">
+        <EmptyState icon={Icon} title="Em breve" description={upcoming} />
       </div>
     </section>
   )

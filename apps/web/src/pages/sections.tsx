@@ -1,43 +1,9 @@
 import {
-  LayoutDashboard,
   Monitor,
   Receipt,
-  Scale,
-  Settings,
   Tags,
-  Users,
 } from 'lucide-react'
 import { PlaceholderPage } from './placeholder'
-
-export function DashboardPage() {
-  return (
-    <PlaceholderPage
-      title="Dashboard"
-      description="Visão geral da operação do seu estabelecimento."
-      icon={LayoutDashboard}
-    />
-  )
-}
-
-export function CollaboratorsPage() {
-  return (
-    <PlaceholderPage
-      title="Colaboradores"
-      description="Profissionais que recebem sua parte direto na venda."
-      icon={Users}
-    />
-  )
-}
-
-export function RulesPage() {
-  return (
-    <PlaceholderPage
-      title="Regras"
-      description="Como cada venda é dividida entre estabelecimento e profissional."
-      icon={Scale}
-    />
-  )
-}
 
 export function CatalogPage() {
   return (
@@ -45,6 +11,7 @@ export function CatalogPage() {
       title="Catálogo"
       description="Serviços oferecidos e seus valores sugeridos."
       icon={Tags}
+      upcoming="Aqui você vai cadastrar os serviços do estabelecimento com preço sugerido, para que a maquininha já saiba o que está sendo cobrado."
     />
   )
 }
@@ -55,6 +22,7 @@ export function TerminalsPage() {
       title="Terminais"
       description="Pontos de venda e maquininhas vinculadas."
       icon={Monitor}
+      upcoming="Aqui você vai vincular cada maquininha ao estabelecimento e acompanhar quais estão ativas."
     />
   )
 }
@@ -65,16 +33,7 @@ export function SalesPage() {
       title="Vendas"
       description="Histórico de vendas e o registro de cada divisão."
       icon={Receipt}
-    />
-  )
-}
-
-export function SettingsPage() {
-  return (
-    <PlaceholderPage
-      title="Configurações"
-      description="Dados do estabelecimento e preferências da conta."
-      icon={Settings}
+      upcoming="Aqui você vai ver cada venda com o extrato da divisão: quanto foi para o estabelecimento, quanto para cada profissional e quando caiu."
     />
   )
 }

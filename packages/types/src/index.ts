@@ -58,3 +58,103 @@ export interface EstablishmentSummary {
 export interface MeResponse extends AuthUser {
   establishment: EstablishmentSummary | null;
 }
+
+/* --------------------------------------------------------- establishments */
+
+export interface Establishment {
+  id: string;
+  cnpj: string;
+  nomeFantasia: string;
+  razaoSocial: string;
+  segmento: string;
+  faturamento: number | null;
+  encargosTributarios: number | null;
+  numPdvs: number;
+  cep: string | null;
+  logradouro: string | null;
+  numero: string | null;
+  complemento: string | null;
+  bairro: string | null;
+  cidade: string | null;
+  estado: string | null;
+  stoneAccountId: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/** Resposta de GET /establishments/me — Establishment + contagens de entidades relacionadas. */
+export interface EstablishmentWithCounts extends Establishment {
+  collaboratorCount: number;
+  terminalCount: number;
+  serviceCount: number;
+  splitRuleCount: number;
+}
+
+export interface CreateEstablishmentDto {
+  cnpj: string;
+  nomeFantasia: string;
+  razaoSocial: string;
+  segmento: string;
+  cep?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  bairro?: string;
+  cidade?: string;
+  estado?: string;
+  faturamento?: number;
+  encargosTributarios?: number;
+  numPdvs?: number;
+}
+
+export type UpdateEstablishmentDto = Partial<CreateEstablishmentDto>;
+
+/* --------------------------------------------------------- collaborators */
+
+export interface Collaborator {
+  id: string;
+  establishmentId: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  document: string;
+  documentType: DocumentType;
+  stoneRecebedorId: string | null;
+  onboardingStatus: OnboardingStatus;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateCollaboratorDto {
+  name: string;
+  email: string;
+  phone?: string;
+  document: string;
+  documentType: DocumentType;
+}
+
+export type UpdateCollaboratorDto = Partial<Pick<CreateCollaboratorDto, 'name' | 'email' | 'phone'>>;
+
+/* ---------------------------------------------------------------- split rules */
+
+export interface SplitRule {
+  id: string;
+  establishmentId: string;
+  name: string;
+  type: SplitRuleType;
+  value: number;
+  description: string | null;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateSplitRuleDto {
+  name: string;
+  type: SplitRuleType;
+  value: number;
+  description?: string;
+}
+
+export type UpdateSplitRuleDto = Partial<CreateSplitRuleDto>;
