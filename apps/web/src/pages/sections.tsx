@@ -1,20 +1,8 @@
 import {
   Monitor,
   Receipt,
-  Tags,
 } from 'lucide-react'
 import { PlaceholderPage } from './placeholder'
-
-export function CatalogPage() {
-  return (
-    <PlaceholderPage
-      title="Catálogo"
-      description="Serviços oferecidos e seus valores sugeridos."
-      icon={Tags}
-      upcoming="Aqui você vai cadastrar os serviços do estabelecimento com preço sugerido, para que a maquininha já saiba o que está sendo cobrado."
-    />
-  )
-}
 
 export function TerminalsPage() {
   return (

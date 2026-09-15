@@ -9,6 +9,7 @@ import { CollaboratorsModule } from './collaborators/collaborators.module.js';
 import { CommonModule } from './common/common.module.js';
 import { EstablishmentsModule } from './establishments/establishments.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { ServicesModule } from './services/services.module.js';
 import { SplitRulesModule } from './split-rules/split-rules.module.js';
 
 @Module({
@@ -20,6 +21,7 @@ import { SplitRulesModule } from './split-rules/split-rules.module.js';
     EstablishmentsModule,
     CollaboratorsModule,
     SplitRulesModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [

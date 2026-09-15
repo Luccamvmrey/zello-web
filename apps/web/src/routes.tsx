@@ -7,9 +7,10 @@ import { RegisterPage } from '@/pages/register'
 import { OnboardingPage } from '@/pages/onboarding'
 import { DashboardPage } from '@/pages/dashboard'
 import { SettingsPage } from '@/pages/settings'
-import { CatalogPage, SalesPage, TerminalsPage } from '@/pages/sections'
+import { SalesPage, TerminalsPage } from '@/pages/sections'
 import { CollaboratorsPage } from '@/features/collaborators/pages/collaborators-page'
 import { RulesPage } from '@/features/rules/pages/rules-page'
+import { CatalogPage } from '@/features/catalog/pages/catalog-page'
 
 export const router = createBrowserRouter([
   {

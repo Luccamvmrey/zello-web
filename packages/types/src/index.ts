@@ -158,3 +158,22 @@ export interface CreateSplitRuleDto {
 }
 
 export type UpdateSplitRuleDto = Partial<CreateSplitRuleDto>;
+
+/* -------------------------------------------------------------- services */
+
+export interface Service {
+  id: string;
+  establishmentId: string;
+  name: string;
+  price: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateServiceDto {
+  name: string;
+  price: number;
+}
+
+export type UpdateServiceDto = Partial<CreateServiceDto>;
