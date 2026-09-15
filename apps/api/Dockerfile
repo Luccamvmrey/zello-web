@@ -1,21 +1,12 @@
-FROM node:22-alpine AS base
+FROM node:22-alpine AS builder
 RUN npm install -g pnpm
-
-FROM base AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/types/package.json packages/types/
-COPY packages/config/package.json packages/config/
-COPY packages/ui/package.json packages/ui/
-COPY apps/api/package.json apps/api/
-RUN pnpm install --frozen-lockfile
 
-FROM base AS builder
-WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/packages ./packages
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
 COPY packages/ packages/
 COPY apps/api/ apps/api/
+
+RUN pnpm install --frozen-lockfile
 RUN pnpm --filter api exec prisma generate
 RUN pnpm --filter api build
 
@@ -24,11 +15,10 @@ RUN npm install -g pnpm
 WORKDIR /app
 ENV NODE_ENV=production
 
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY packages/types/package.json packages/types/
-COPY packages/config/package.json packages/config/
-COPY packages/ui/package.json packages/ui/
+COPY pnpm-workspace.yaml pnpm-lock.yaml package.json ./
+COPY packages/ packages/
 COPY apps/api/package.json apps/api/
+
 RUN pnpm install --frozen-lockfile --prod
 
 COPY --from=builder /app/apps/api/dist apps/api/dist
