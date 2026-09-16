@@ -11,8 +11,8 @@
     />
     <link rel="canonical" href="https://zello.com.br/" />
 
-    <meta name="theme-color" content="#f0f2ee" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1b2b22" media="(prefers-color-scheme: dark)" />
+    <!-- App dark-only desde a Spec R.1: uma cor só, o "mar" (--bg-strong). -->
+    <meta name="theme-color" content="#121210" />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
@@ -35,20 +35,7 @@
     />
     <meta name="twitter:image" content="https://zello.com.br/og.png" />
 
-    <script>
-      // Applies the stored/preferred theme before first paint so dark-mode
-      // visitors never see a flash of the light paper background.
-      ;(function () {
-        try {
-          var stored = localStorage.getItem("zello-theme")
-          var dark =
-            stored === "dark" ||
-            (!stored &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches)
-          if (dark) document.documentElement.classList.add("dark")
-        } catch (e) {}
-      })()
-    </script>
+    <link rel="preload" as="image" href="/images/poscel.webp" type="image/webp" />
   </head>
   <body>
     <div id="root"></div>

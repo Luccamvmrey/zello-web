@@ -1,7 +1,7 @@
 import { ReceiptText, ShieldCheck, SlidersHorizontal } from "lucide-react"
-import { LedgerRule } from "@/components/ledger-rule"
+
+import { Island, IslandCard } from "@/components/island"
 import { Reveal } from "@/components/reveal"
-import { SectionContainer } from "@/components/section-container"
 
 const points = [
   {
@@ -21,41 +21,26 @@ const points = [
   },
 ]
 
-function Trust() {
+export function Trust() {
   return (
-    <section
-      id="seguranca"
-      className="scroll-mt-20 border-b border-border bg-secondary py-16 sm:py-24"
-    >
-      <SectionContainer>
-        <Reveal>
-          <h2 className="font-mono text-2xl tracking-tight text-foreground lg:text-4xl">
-            Confiança e segurança
-          </h2>
-        </Reveal>
+    <Island id="seguranca" className="scroll-mt-20 px-6 py-12 md:px-12 md:py-16">
+      <h2 className="text-[clamp(2rem,3.2vw,3rem)] font-bold leading-tight tracking-tight">
+        Confiança e <span className="text-primary">segurança</span>
+      </h2>
 
-        <div className="mt-10 flex flex-col lg:grid lg:grid-cols-3 lg:gap-x-10">
-          <LedgerRule className="lg:hidden" />
-          {points.map((point, index) => (
-            <Reveal key={point.title} delay={index * 100}>
-              <div className="flex flex-col gap-4 py-6 lg:border-t lg:border-border lg:py-0 lg:pt-6">
-                <span className="grid size-10 shrink-0 place-items-center rounded-md border border-border bg-background text-primary dark:text-highlight">
-                  <point.icon aria-hidden="true" className="size-5" />
-                </span>
-                <div className="flex flex-col gap-1">
-                  <h3 className="font-medium text-foreground">{point.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {point.body}
-                  </p>
-                </div>
-              </div>
-              <LedgerRule className="lg:hidden" />
-            </Reveal>
-          ))}
-        </div>
-      </SectionContainer>
-    </section>
+      <div className="mt-10 grid gap-2.5 lg:grid-cols-3">
+        {points.map((point, index) => (
+          <Reveal key={point.title} delay={index * 100} className="h-full">
+            <IslandCard className="flex h-full flex-col gap-4 px-6 py-8">
+              <span className="grid size-10 shrink-0 place-items-center rounded-md bg-surface-sunken text-primary">
+                <point.icon aria-hidden="true" className="size-5" />
+              </span>
+              <h3 className="text-lg font-semibold text-foreground">{point.title}</h3>
+              <p className="text-sm leading-relaxed text-muted-foreground">{point.body}</p>
+            </IslandCard>
+          </Reveal>
+        ))}
+      </div>
+    </Island>
   )
 }
-
-export { Trust }

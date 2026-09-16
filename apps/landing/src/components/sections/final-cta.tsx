@@ -1,29 +1,33 @@
+import { ArrowRightIcon } from "lucide-react"
+
+import { Island } from "@/components/island"
 import { Button } from "@/components/ui/button"
-import { SectionContainer } from "@/components/section-container"
 import { registerUrl } from "@/lib/urls"
 
-function FinalCta() {
+export function FinalCta() {
   return (
-    <section id="cta" className="scroll-mt-20 bg-primary py-20 sm:py-28">
-      <SectionContainer className="flex flex-col items-center gap-6 text-center">
-        <h2 className="max-w-2xl font-mono text-2xl tracking-tight text-balance text-primary-foreground sm:text-3xl lg:text-5xl">
-          Pronto pra parar de calcular repasse na mão?
-        </h2>
-        <p className="max-w-md text-sm leading-relaxed text-primary-foreground/80 lg:text-base">
-          Crie sua conta e comece a dividir cada pagamento no instante da
-          venda, com registro auditável de cada centavo.
-        </p>
-        <Button
-          render={<a href={registerUrl} />}
-          nativeButton={false}
-          size="xl"
-          className="mt-2 bg-background text-foreground hover:bg-background/90"
-        >
-          Criar conta
-        </Button>
-      </SectionContainer>
-    </section>
+    // Island normal, não uma banda lima: uma superfície clara do tamanho da
+    // seção quebraria o conceito de painéis flutuando num mar escuro.
+    <Island
+      id="cta"
+      className="flex scroll-mt-20 flex-col items-center gap-6 px-6 py-20 text-center md:px-12 md:py-28"
+    >
+      <h2 className="max-w-3xl text-[clamp(2rem,3.4vw,3rem)] font-bold leading-tight tracking-tight text-balance">
+        Pronto pra parar de calcular repasse na mão?
+      </h2>
+      <p className="max-w-xl text-[clamp(1rem,1.2vw,1.125rem)] leading-relaxed text-muted-foreground">
+        Crie sua conta e comece a dividir cada pagamento no instante da venda, com registro
+        auditável de cada centavo.
+      </p>
+      <Button
+        render={<a href={registerUrl} />}
+        nativeButton={false}
+        size="xl"
+        className="mt-2 rounded-[10px] text-[1.125rem]"
+      >
+        Criar conta
+        <ArrowRightIcon />
+      </Button>
+    </Island>
   )
 }
-
-export { FinalCta }
