@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Param, Patch, Query } from '@nestjs/common';
-import type { AdminAccount, AdminAccountStatusFilter, AdminOverview } from '@repo/types';
+import type {
+  AdminAccount,
+  AdminAccountStatusFilter,
+  AdminEstablishmentOption,
+  AdminOverview,
+} from '@repo/types';
 import { AdminOnly } from '../common/decorators/admin-only.decorator.js';
 import { AdminService } from './admin.service.js';
 import { RejectAccountDto } from './dto/reject-account.dto.js';
@@ -8,6 +13,11 @@ import { RejectAccountDto } from './dto/reject-account.dto.js';
 @AdminOnly()
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
+
+  @Get('establishments')
+  findEstablishments(): Promise<AdminEstablishmentOption[]> {
+    return this.adminService.findEstablishments();
+  }
 
   @Get('accounts')
   findAccounts(

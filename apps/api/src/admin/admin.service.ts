@@ -1,10 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import type { AdminAccount, AdminAccountStatusFilter, AdminOverview } from '@repo/types';
+import type {
+  AdminAccount,
+  AdminAccountStatusFilter,
+  AdminEstablishmentOption,
+  AdminOverview,
+} from '@repo/types';
 import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
 export class AdminService {
   constructor(private readonly prisma: PrismaService) {}
+
+  async findEstablishments(): Promise<AdminEstablishmentOption[]> {
+    return this.prisma.establishment.findMany({
+      select: { id: true, nomeFantasia: true, cnpj: true },
+      orderBy: { nomeFantasia: 'asc' },
+    });
+  }
 
   async findAccounts(status: AdminAccountStatusFilter): Promise<AdminAccount[]> {
     const users = await this.prisma.user.findMany({
@@ -39,16 +51,17 @@ export class AdminService {
   }
 
   async overview(): Promise<AdminOverview> {
-    const [pendingAccounts, totalEstablishments, totalCollaborators] = await Promise.all([
-      this.prisma.user.count({ where: { accountStatus: 'PENDING_APPROVAL' } }),
-      this.prisma.establishment.count(),
-      this.prisma.collaborator.count(),
-    ]);
+    const [pendingAccounts, pendingSolicitations, totalEstablishments, totalCollaborators] =
+      await Promise.all([
+        this.prisma.user.count({ where: { accountStatus: 'PENDING_APPROVAL' } }),
+        this.prisma.solicitation.count({ where: { status: 'PENDING' } }),
+        this.prisma.establishment.count(),
+        this.prisma.collaborator.count(),
+      ]);
 
     return {
       pendingAccounts,
-      // Vem do spec R.2 — intencionalmente 0 até lá.
-      pendingSolicitations: 0,
+      pendingSolicitations,
       totalEstablishments,
       totalCollaborators,
     };

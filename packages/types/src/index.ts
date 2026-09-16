@@ -251,3 +251,59 @@ export interface AdminOverview {
   totalEstablishments: number;
   totalCollaborators: number;
 }
+
+/* ------------------------------------------------------------ solicitations */
+
+export type SolicitationType = 'NEW_COLLABORATOR' | 'NEW_TERMINAL';
+
+export type SolicitationStatus = 'PENDING' | 'APPROVED' | 'REJECTED';
+
+export type SolicitationStatusFilter = SolicitationStatus | 'ALL';
+
+export interface CollaboratorSolicitationData {
+  name: string;
+  email: string;
+  phone?: string;
+  document: string;
+  documentType: DocumentType;
+}
+
+export interface TerminalSolicitationData {
+  name: string;
+}
+
+export interface CreateSolicitationDto {
+  type: SolicitationType;
+  data: CollaboratorSolicitationData | TerminalSolicitationData;
+}
+
+export interface Solicitation {
+  id: string;
+  establishmentId: string;
+  type: SolicitationType;
+  status: SolicitationStatus;
+  data: CollaboratorSolicitationData | TerminalSolicitationData;
+  adminNotes: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+}
+
+export interface AdminSolicitationEstablishment {
+  id: string;
+  nomeFantasia: string;
+  cnpj: string;
+}
+
+export interface AdminSolicitation extends Solicitation {
+  establishment: AdminSolicitationEstablishment;
+}
+
+export interface RejectSolicitationDto {
+  notes?: string;
+}
+
+export interface AdminEstablishmentOption {
+  id: string;
+  nomeFantasia: string;
+  cnpj: string;
+}

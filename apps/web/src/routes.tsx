@@ -9,14 +9,15 @@ import { OnboardingPage } from '@/pages/onboarding'
 import { DashboardPage } from '@/pages/dashboard'
 import { SettingsPage } from '@/pages/settings'
 import { SalesPage } from '@/pages/sections'
-import { SolicitationsPlaceholderPage } from '@/pages/solicitations-placeholder'
 import { CollaboratorsPage } from '@/features/collaborators/pages/collaborators-page'
 import { RulesPage } from '@/features/rules/pages/rules-page'
 import { CatalogPage } from '@/features/catalog/pages/catalog-page'
 import { TerminalsPage } from '@/features/terminals/pages/terminals-page'
 import { TerminalDetailPage } from '@/features/terminals/pages/terminal-detail-page'
+import { SolicitationsPage } from '@/features/solicitations/pages/solicitations-page'
 import { AdminOverviewPage } from '@/pages/admin-overview'
 import { AdminAccountsPage } from '@/features/admin/pages/admin-accounts-page'
+import { AdminSolicitationsPage } from '@/features/admin-solicitations/pages/admin-solicitations-page'
 
 export const router = createBrowserRouter([
   {
@@ -40,7 +41,7 @@ export const router = createBrowserRouter([
       { path: '/catalog', element: <CatalogPage /> },
       { path: '/terminals', element: <TerminalsPage /> },
       { path: '/terminals/:id', element: <TerminalDetailPage /> },
-      { path: '/solicitations', element: <SolicitationsPlaceholderPage /> },
+      { path: '/solicitations', element: <SolicitationsPage /> },
       { path: '/sales', element: <SalesPage /> },
       { path: '/settings', element: <SettingsPage /> },
     ],
@@ -50,7 +51,7 @@ export const router = createBrowserRouter([
     children: [
       { path: '/admin', element: <AdminOverviewPage /> },
       { path: '/admin/accounts', element: <AdminAccountsPage /> },
-      { path: '/admin/solicitations', element: <SolicitationsPlaceholderPage /> },
+      { path: '/admin/solicitations', element: <AdminSolicitationsPage /> },
     ],
   },
   { path: '*', element: <Navigate to="/dashboard" replace /> },

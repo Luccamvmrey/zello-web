@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type {
   AdminAccount,
   AdminAccountStatusFilter,
+  AdminEstablishmentOption,
   AdminOverview,
   RejectAccountDto,
 } from '@repo/types'
@@ -10,6 +11,17 @@ import { api } from '@/lib/api'
 export const adminKeys = {
   accounts: (status: AdminAccountStatusFilter) => ['admin', 'accounts', status] as const,
   overview: ['admin', 'overview'] as const,
+  establishments: ['admin', 'establishments'] as const,
+}
+
+export function useAdminEstablishments() {
+  return useQuery({
+    queryKey: adminKeys.establishments,
+    queryFn: async (): Promise<AdminEstablishmentOption[]> => {
+      const { data } = await api.get<AdminEstablishmentOption[]>('/admin/establishments')
+      return data
+    },
+  })
 }
 
 export function useAdminAccounts(status: AdminAccountStatusFilter) {
@@ -22,13 +34,14 @@ export function useAdminAccounts(status: AdminAccountStatusFilter) {
   })
 }
 
-export function useAdminOverview() {
+export function useAdminOverview(enabled = true) {
   return useQuery({
     queryKey: adminKeys.overview,
     queryFn: async (): Promise<AdminOverview> => {
       const { data } = await api.get<AdminOverview>('/admin/overview')
       return data
     },
+    enabled,
   })
 }
 

@@ -5,5 +5,6 @@ import { TerminalsService } from './terminals.service.js';
 @Module({
   controllers: [TerminalsController],
   providers: [TerminalsService],
+  exports: [TerminalsService],
 })
 export class TerminalsModule {}

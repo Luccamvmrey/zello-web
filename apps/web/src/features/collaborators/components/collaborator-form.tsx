@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
-import type { Collaborator } from '@repo/types'
+import type { Collaborator, CreateCollaboratorDto } from '@repo/types'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { DialogFooter } from '@/components/ui/dialog'
@@ -49,12 +49,24 @@ const formSchema = z
 
 export type CollaboratorFormValues = z.infer<typeof formSchema>
 
+/**
+ * Quando presente, substitui as mutations internas de create/update — usado
+ * pelo fluxo de solicitação (spec R.2), que envia o mesmo payload pra
+ * `POST /solicitations` em vez de `POST /collaborators`.
+ */
+export interface CollaboratorFormSubmitOverride {
+  onSubmit: (dto: CreateCollaboratorDto) => Promise<void>
+  successMessage: string
+  submitLabel: string
+}
+
 interface CollaboratorFormProps {
   mode: 'create' | 'edit'
   collaborator?: Collaborator
-  onSuccess?: (collaborator: Collaborator) => void
+  onSuccess?: () => void
   /** Quando presente, o rodapé ganha um "Cancelar" ao lado do envio. */
   onCancel?: () => void
+  submitOverride?: CollaboratorFormSubmitOverride
 }
 
 export function CollaboratorForm({
@@ -62,11 +74,11 @@ export function CollaboratorForm({
   collaborator,
   onSuccess,
   onCancel,
+  submitOverride,
 }: CollaboratorFormProps) {
   const [apiError, setApiError] = useState<string | null>(null)
   const createCollaborator = useCreateCollaborator()
   const updateCollaborator = useUpdateCollaborator()
-  const isSubmitting = createCollaborator.isPending || updateCollaborator.isPending
 
   const form = useForm<CollaboratorFormValues>({
     resolver: zodResolver(formSchema),
@@ -78,6 +90,9 @@ export function CollaboratorForm({
       document: collaborator ? formatDocument(collaborator.document, collaborator.documentType) : '',
     },
   })
+
+  const isSubmitting =
+    createCollaborator.isPending || updateCollaborator.isPending || form.formState.isSubmitting
 
   const documentType = form.watch('documentType')
 
@@ -92,8 +107,17 @@ export function CollaboratorForm({
     setApiError(null)
 
     try {
-      if (mode === 'create') {
-        const created = await createCollaborator.mutateAsync({
+      if (submitOverride) {
+        await submitOverride.onSubmit({
+          name: values.name.trim(),
+          email: values.email.trim(),
+          phone: values.phone ? unformatPhone(values.phone) : undefined,
+          document: unformatDocument(values.document),
+          documentType: values.documentType,
+        })
+        toast.success(submitOverride.successMessage)
+      } else if (mode === 'create') {
+        await createCollaborator.mutateAsync({
           name: values.name.trim(),
           email: values.email.trim(),
           phone: values.phone ? unformatPhone(values.phone) : undefined,
@@ -101,9 +125,8 @@ export function CollaboratorForm({
           documentType: values.documentType,
         })
         toast.success('Colaborador adicionado.')
-        onSuccess?.(created)
       } else {
-        const updated = await updateCollaborator.mutateAsync({
+        await updateCollaborator.mutateAsync({
           id: collaborator!.id,
           dto: {
             name: values.name.trim(),
@@ -112,8 +135,8 @@ export function CollaboratorForm({
           },
         })
         toast.success('Colaborador atualizado.')
-        onSuccess?.(updated)
       }
+      onSuccess?.()
     } catch (err) {
       setApiError(apiErrorMessage(err, 'Não foi possível salvar o colaborador.'))
     }
@@ -265,7 +288,9 @@ export function CollaboratorForm({
             </Button>
           ) : null}
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? 'Salvando…' : mode === 'create' ? 'Adicionar' : 'Salvar'}
+            {isSubmitting
+              ? 'Salvando…'
+              : submitOverride?.submitLabel ?? (mode === 'create' ? 'Adicionar' : 'Salvar')}
           </Button>
         </DialogFooter>
       </form>

@@ -15,6 +15,7 @@ import { BrandMark } from '@repo/ui/brand-mark'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/auth-context'
+import { useAdminOverview } from '@/lib/queries/admin'
 
 interface NavItem {
   to: string
@@ -77,7 +78,16 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const isAdmin = user?.role === 'ADMIN'
-  const mainNav = isAdmin ? ADMIN_MAIN_NAV : ESTABLISHMENT_MAIN_NAV
+  const { data: overview } = useAdminOverview(isAdmin)
+  const pendingSolicitations = overview?.pendingSolicitations ?? 0
+
+  const mainNav = isAdmin
+    ? ADMIN_MAIN_NAV.map((item) =>
+        item.to === '/admin/solicitations' && pendingSolicitations > 0
+          ? { ...item, label: `${item.label} (${pendingSolicitations})` }
+          : item,
+      )
+    : ESTABLISHMENT_MAIN_NAV
 
   function handleLogout() {
     onNavigate?.()

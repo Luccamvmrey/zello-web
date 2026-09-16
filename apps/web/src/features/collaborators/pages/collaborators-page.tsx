@@ -1,6 +1,5 @@
 import { Users } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -8,12 +7,10 @@ import { EmptyState } from '@/components/empty-state'
 import { ListToolbar } from '@/components/list-toolbar'
 import { PageHeader } from '@/components/page-header'
 import { useCollaborators } from '@/lib/queries/collaborators'
-import { CollaboratorFormDialog } from '../components/collaborator-form-dialog'
 import { CollaboratorsTable } from '../components/collaborators-table'
 
 export function CollaboratorsPage() {
   const [includeInactive, setIncludeInactive] = useState(false)
-  const [createOpen, setCreateOpen] = useState(false)
   const { data, isLoading } = useCollaborators(includeInactive)
 
   const count = data?.length ?? 0
@@ -22,8 +19,7 @@ export function CollaboratorsPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Colaboradores"
-        description="Quem recebe parte de cada venda do estabelecimento."
-        action={<Button onClick={() => setCreateOpen(true)}>Novo colaborador</Button>}
+        description="Quem recebe parte de cada venda do estabelecimento. Peça a inclusão de alguém novo em Solicitações."
       />
 
       <ListToolbar
@@ -52,13 +48,10 @@ export function CollaboratorsPage() {
           <EmptyState
             icon={Users}
             title="Nenhum colaborador cadastrado"
-            description="Cadastre os profissionais que recebem parte de cada venda. Sem eles, não há o que dividir."
-            action={<Button onClick={() => setCreateOpen(true)}>Adicionar o primeiro</Button>}
+            description="Peça a inclusão dos profissionais que recebem parte de cada venda na tela de Solicitações."
           />
         }
       />
-
-      <CollaboratorFormDialog mode="create" open={createOpen} onOpenChange={setCreateOpen} />
     </div>
   )
 }

@@ -58,6 +58,17 @@ enum AccountStatus {
   SUSPENDED
 }
 
+enum SolicitationType {
+  NEW_COLLABORATOR
+  NEW_TERMINAL
+}
+
+enum SolicitationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
 /// Quem faz login. O Establishment é criado depois, no onboarding.
 model User {
   id           String  @id @default(uuid()) @db.Uuid
@@ -74,6 +85,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  reviewedSolicitations Solicitation[]
 
   @@map("users")
 }
@@ -112,6 +125,7 @@ model Establishment {
   services         Service[]
   logicalTerminals LogicalTerminal[]
   sales            Sale[]
+  solicitations    Solicitation[]
 
   @@map("establishments")
 }
@@ -276,4 +290,31 @@ model SaleSplit {
   @@index([saleId])
   @@index([collaboratorId])
   @@map("sale_splits")
+}
+
+/// Pedido do establishment pra criar um recurso (Collaborator/LogicalTerminal),
+/// que só é criado de fato quando um ADMIN aprova.
+model Solicitation {
+  id              String        @id @default(uuid()) @db.Uuid
+  establishmentId String        @db.Uuid
+  establishment   Establishment @relation(fields: [establishmentId], references: [id], onDelete: Cascade)
+
+  type   SolicitationType
+  status SolicitationStatus @default(PENDING)
+
+  /// Payload com os dados do recurso solicitado — formato depende de `type`.
+  data Json
+
+  /// Observações do admin (ex: motivo de rejeição).
+  adminNotes String?
+
+  reviewedById String?   @db.Uuid
+  reviewedBy   User?     @relation(fields: [reviewedById], references: [id], onDelete: SetNull)
+  reviewedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([establishmentId])
+  @@map("solicitations")
 }

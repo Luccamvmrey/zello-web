@@ -12,6 +12,7 @@ import { CommonModule } from './common/common.module.js';
 import { EstablishmentsModule } from './establishments/establishments.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
 import { ServicesModule } from './services/services.module.js';
+import { SolicitationsModule } from './solicitations/solicitations.module.js';
 import { SplitRulesModule } from './split-rules/split-rules.module.js';
 import { TerminalsModule } from './terminals/terminals.module.js';
 
@@ -26,6 +27,7 @@ import { TerminalsModule } from './terminals/terminals.module.js';
     SplitRulesModule,
     ServicesModule,
     TerminalsModule,
+    SolicitationsModule,
     AdminModule,
   ],
   controllers: [AppController],

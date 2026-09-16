@@ -5,5 +5,6 @@ import { CollaboratorsService } from './collaborators.service.js';
 @Module({
   controllers: [CollaboratorsController],
   providers: [CollaboratorsService],
+  exports: [CollaboratorsService],
 })
 export class CollaboratorsModule {}
