@@ -18,6 +18,10 @@ export type PaymentMethod = 'CREDIT' | 'DEBIT' | 'PIX';
 
 export type SaleStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'FAILED';
 
+export type UserRole = 'ESTABLISHMENT' | 'ADMIN';
+
+export type AccountStatus = 'PENDING_APPROVAL' | 'ACTIVE' | 'SUSPENDED';
+
 /* ----------------------------------------------------------------- auth */
 
 export interface RegisterPayload {
@@ -31,11 +35,17 @@ export interface LoginPayload {
   password: string;
 }
 
-/** Usuário devolvido por /auth/register e /auth/login. */
+/** Resposta de POST /auth/register — a conta ainda não pode logar. */
+export interface RegisterResponse {
+  message: string;
+}
+
+/** Usuário devolvido por /auth/login. */
 export interface AuthUser {
   id: string;
   email: string;
   name: string;
+  role: UserRole;
   establishmentId: string | null;
 }
 
@@ -56,6 +66,7 @@ export interface EstablishmentSummary {
 
 /** Resposta de GET /auth/me. */
 export interface MeResponse extends AuthUser {
+  accountStatus: AccountStatus;
   establishment: EstablishmentSummary | null;
 }
 
@@ -210,3 +221,33 @@ export interface CreateTerminalDto {
 }
 
 export type UpdateTerminalDto = Partial<CreateTerminalDto>;
+
+/* ------------------------------------------------------------------ admin */
+
+export interface AdminAccountEstablishment {
+  nomeFantasia: string;
+  cnpj: string;
+}
+
+export interface AdminAccount {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  accountStatus: AccountStatus;
+  createdAt: string;
+  establishment: AdminAccountEstablishment | null;
+}
+
+export type AdminAccountStatusFilter = AccountStatus | 'ALL';
+
+export interface RejectAccountDto {
+  reason?: string;
+}
+
+export interface AdminOverview {
+  pendingAccounts: number;
+  pendingSolicitations: number;
+  totalEstablishments: number;
+  totalCollaborators: number;
+}

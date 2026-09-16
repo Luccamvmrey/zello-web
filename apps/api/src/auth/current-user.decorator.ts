@@ -1,10 +1,12 @@
 import { createParamDecorator, type ExecutionContext } from '@nestjs/common';
+import type { UserRole } from '@repo/types';
 import type { Request } from 'express';
 
 /** Identidade extraída do JWT pela JwtStrategy. */
 export interface JwtUser {
   id: string;
   email: string;
+  role: UserRole;
 }
 
 /** Injeta no controller o usuário validado pelo JwtAuthGuard. */

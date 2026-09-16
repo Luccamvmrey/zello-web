@@ -4,6 +4,7 @@ import type {
   LoginPayload,
   MeResponse,
   RegisterPayload,
+  RegisterResponse,
 } from '@repo/types'
 
 export interface AuthContextValue {
@@ -11,7 +12,7 @@ export interface AuthContextValue {
   establishment: EstablishmentSummary | null
   isLoading: boolean
   login: (payload: LoginPayload) => Promise<void>
-  register: (payload: RegisterPayload) => Promise<void>
+  register: (payload: RegisterPayload) => Promise<RegisterResponse>
   logout: () => void
 }
 

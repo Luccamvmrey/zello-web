@@ -1,11 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { AdminModule } from './admin/admin.module.js';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { AuthModule } from './auth/auth.module.js';
 import { JwtAuthGuard } from './auth/jwt-auth.guard.js';
 import { CollaboratorsModule } from './collaborators/collaborators.module.js';
+import { AccountStatusGuard } from './common/guards/account-status.guard.js';
 import { CommonModule } from './common/common.module.js';
 import { EstablishmentsModule } from './establishments/establishments.module.js';
 import { PrismaModule } from './prisma/prisma.module.js';
@@ -24,12 +26,15 @@ import { TerminalsModule } from './terminals/terminals.module.js';
     SplitRulesModule,
     ServicesModule,
     TerminalsModule,
+    AdminModule,
   ],
   controllers: [AppController],
   providers: [
     AppService,
     // Tudo protegido por padrão; rotas abertas usam @Public().
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    // Segunda barreira: bloqueia contas pendentes/suspensas mesmo com token válido.
+    { provide: APP_GUARD, useClass: AccountStatusGuard },
   ],
 })
 export class AppModule {}

@@ -4,26 +4,9 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#f0f2ee" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1b2b22" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#121210" />
     <meta name="robots" content="noindex, nofollow" />
     <title>Zello — Painel</title>
-
-    <script>
-      // Applies the stored/preferred theme before first paint so dark-mode
-      // users never see a flash of the light paper background. Same storage
-      // key as the landing, so the choice carries between the two apps.
-      ;(function () {
-        try {
-          var stored = localStorage.getItem("zello-theme")
-          var dark =
-            stored === "dark" ||
-            (!stored &&
-              window.matchMedia("(prefers-color-scheme: dark)").matches)
-          if (dark) document.documentElement.classList.add("dark")
-        } catch (e) {}
-      })()
-    </script>
   </head>
   <body>
     <div id="root"></div>

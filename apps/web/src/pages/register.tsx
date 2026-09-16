@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,9 +10,9 @@ const MIN_PASSWORD_LENGTH = 8
 
 export function RegisterPage() {
   const { register } = useAuth()
-  const navigate = useNavigate()
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -34,12 +34,28 @@ export function RegisterPage() {
         email: String(form.get('email') ?? ''),
         password,
       })
-      navigate('/dashboard', { replace: true })
+      setSubmitted(true)
     } catch (err) {
       setError(apiErrorMessage(err, 'Não foi possível criar a conta.'))
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  if (submitted) {
+    return (
+      <div>
+        {/* design-contract-allow C3: tela pública, moldura do AuthLayout, mesmo padrão do form acima. */}
+        <h1 className="text-2xl font-semibold tracking-tight">Conta criada com sucesso!</h1>
+        <p className="text-muted-foreground mt-2 text-sm">
+          Sua conta está em análise. Você receberá acesso assim que for aprovada.
+        </p>
+
+        <Button render={<Link to="/login" />} size="lg" className="mt-8">
+          Voltar ao login
+        </Button>
+      </div>
+    )
   }
 
   return (

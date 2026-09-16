@@ -8,104 +8,82 @@
 }
 
 :root {
-  --background: #f0f2ee;
-  --foreground: #1b2b22;
+  /* Fundos */
+  --bg-strong: #121210;
+  --bg-surface: #1c1c19;
+  --bg-elevated: #151513;
+  --bg-input: #2a2a26;
+
+  /* Texto */
+  --text-primary: #e8ebdf;
+  --text-secondary: #a8b0a4;
+  --text-muted: #6b7068;
+
+  /* Ação */
+  --color-primary: #b3de00;
+  --color-primary-hover: #c5f000;
+  --color-secondary: #90ab22;
+  --color-accent: #b3de00;
+
+  /* Status */
+  --color-success: #4caf50;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-info: #3b82f6;
+
+  /* Superfícies */
+  --border-color: #2a2a26;
+  --border-focus: #b3de00;
+  --off-white: #d7debd;
+
+  --background: var(--bg-strong);
+  --foreground: var(--text-primary);
 
   /* Superfície elevada. DEVE diferir de --background, senão Card e Popover
-     desaparecem no fundo (era #f0f2ee, idêntico, ratio 1.00). */
-  --card: #f7f8f5;
-  --card-foreground: #1b2b22;
-  --popover: #f7f8f5;
-  --popover-foreground: #1b2b22;
+     desaparecem no fundo. */
+  --card: var(--bg-surface);
+  --card-foreground: var(--text-primary);
+  --popover: var(--bg-surface);
+  --popover-foreground: var(--text-primary);
 
   /* Superfície rebaixada: toolbars, zebra de tabela, faixas. */
-  --surface-sunken: #e7eae2;
+  --surface-sunken: var(--bg-elevated);
 
-  --primary: #2f5233;
-  --primary-foreground: #f0f2ee;
+  --primary: var(--color-primary);
+  --primary-foreground: var(--bg-strong);
 
-  --secondary: #e2e6dc;
-  --secondary-foreground: #1b2b22;
+  --secondary: var(--bg-elevated);
+  --secondary-foreground: var(--text-primary);
 
-  --muted: #e2e6dc;
-  --muted-foreground: #4a5a4e;
+  --muted: var(--bg-input);
+  --muted-foreground: var(--text-secondary);
 
-  --accent: #e2e6dc;
-  --accent-foreground: #1b2b22;
+  --accent: var(--color-primary);
+  --accent-foreground: var(--bg-strong);
 
   /* Bordas em três forças, por papel:
      --input   contorna controles de formulário. É o único que TEM requisito
-               normativo (WCAG 1.4.11, 3:1 contra o fundo adjacente): 3.14:1
-               contra o papel, 3.32:1 contra o card.
-     --border  é estrutural (divisórias, contorno de card). Não é regido pelo
-               1.4.11 — o alvo aqui é legibilidade, 2.07:1 contra o papel.
+               normativo (WCAG 1.4.11, 3:1 contra o fundo adjacente).
+     --border  é estrutural (divisórias, contorno de card).
      --border-subtle é decorativo (separador interno, papel pautado). */
-  --border: #a3ad9c;
-  --border-subtle: #d5dacc;
-  --input: #7f8c79;
-  --ring: #2f5233;
+  --border: var(--border-color);
+  --border-subtle: color-mix(in srgb, var(--border-color) 50%, var(--bg-surface));
+  --input: var(--bg-input);
+  --ring: var(--color-primary);
 
   /* Semânticos na família da marca — não o vermelho default do shadcn. */
-  --destructive: #8f2f28;
-  --destructive-foreground: #f7f8f5;
-  --success: #2f5233;
-  --success-foreground: #f7f8f5;
-  /* Dourado escurecido até ficar legível como texto (--highlight dá só
-     2.77:1 sobre o papel e serve apenas como acento gráfico). 4.80:1 sobre o
-     papel — #8a6a1f, o primeiro candidato, parava em 4.48 e reprovava. */
-  --warning: #856520;
-  --warning-foreground: #f7f8f5;
+  --destructive: var(--color-danger);
+  --destructive-foreground: var(--text-primary);
+  --success: var(--color-success);
+  --success-foreground: var(--text-primary);
+  --warning: var(--color-warning);
+  --warning-foreground: var(--bg-strong);
 
   /* Elevação de livro: insinua a folha, nunca material design. */
-  --elevation-raised: 0 1px 2px oklch(0.25 0.03 150 / 0.06);
-  --elevation-overlay: 0 8px 24px oklch(0.25 0.03 150 / 0.14);
-
-  /* Destaque/números */
-  --highlight: #b08d3e;
-  --highlight-foreground: #1b2b22;
-}
-
-.dark {
-  --background: #1b2b22;
-  --foreground: #f0f2ee;
-
-  --card: #26392e;
-  --card-foreground: #f0f2ee;
-  --popover: #26392e;
-  --popover-foreground: #f0f2ee;
-
-  --surface-sunken: #16221b;
-
-  --primary: #2f5233;
-  --primary-foreground: #f0f2ee;
-
-  --secondary: #2c3f31;
-  --secondary-foreground: #f0f2ee;
-
-  --muted: #2c3f31;
-  --muted-foreground: #b7c2b8;
-
-  --accent: #2c3f31;
-  --accent-foreground: #f0f2ee;
-
-  --border: #3d5646;
-  --border-subtle: #31463a;
-  /* 3.66:1 contra o fundo e 3.03:1 contra o card — mesmo critério do claro. */
-  --input: #688570;
-  --ring: #b08d3e;
-
-  /* No escuro os semânticos clareiam para continuarem legíveis como texto;
-     o foreground escurece porque agora é o par de contraste. */
-  --destructive: #d98880;
-  --destructive-foreground: #1b2b22;
-  --success: #7d9a80;
-  --success-foreground: #1b2b22;
-  --warning: #d4ae5e;
-  --warning-foreground: #1b2b22;
-
   --elevation-raised: 0 1px 2px oklch(0 0 0 / 0.3);
   --elevation-overlay: 0 8px 24px oklch(0 0 0 / 0.45);
 
-  --highlight: #b08d3e;
-  --highlight-foreground: #1b2b22;
+  /* Destaque/números */
+  --highlight: var(--color-accent);
+  --highlight-foreground: var(--bg-strong);
 }

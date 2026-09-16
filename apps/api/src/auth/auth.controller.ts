@@ -1,5 +1,5 @@
 import { Body, Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
-import type { AuthResponse, MeResponse } from '@repo/types';
+import type { AuthResponse, MeResponse, RegisterResponse } from '@repo/types';
 import { AuthService } from './auth.service.js';
 import { CurrentUser, type JwtUser } from './current-user.decorator.js';
 import { LoginDto } from './dto/login.dto.js';
@@ -12,7 +12,7 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  register(@Body() dto: RegisterDto): Promise<AuthResponse> {
+  register(@Body() dto: RegisterDto): Promise<RegisterResponse> {
     return this.authService.register(dto);
   }
 

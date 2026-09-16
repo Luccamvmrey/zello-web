@@ -1,5 +1,6 @@
 import {
   ConflictException,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -10,6 +11,8 @@ import type {
   AuthUser,
   EstablishmentSummary,
   MeResponse,
+  RegisterResponse,
+  UserRole,
 } from '@repo/types';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { LoginDto } from './dto/login.dto.js';
@@ -28,7 +31,7 @@ export class AuthService {
     private readonly jwt: JwtService,
   ) {}
 
-  async register(dto: RegisterDto): Promise<AuthResponse> {
+  async register(dto: RegisterDto): Promise<RegisterResponse> {
     const email = normalizeEmail(dto.email);
 
     const existing = await this.prisma.user.findUnique({ where: { email } });
@@ -37,15 +40,16 @@ export class AuthService {
       throw new ConflictException('Este e-mail já está cadastrado.');
     }
 
-    const user = await this.prisma.user.create({
+    await this.prisma.user.create({
       data: {
         email,
         name: dto.name.trim(),
         passwordHash: await hash(dto.password, BCRYPT_ROUNDS),
+        accountStatus: 'PENDING_APPROVAL',
       },
     });
 
-    return this.buildAuthResponse(user);
+    return { message: 'Conta criada. Aguarde aprovação para acessar o sistema.' };
   }
 
   async login(dto: LoginDto): Promise<AuthResponse> {
@@ -61,6 +65,14 @@ export class AuthService {
 
     if (!passwordMatches) {
       throw new UnauthorizedException(INVALID_CREDENTIALS);
+    }
+
+    if (user.accountStatus === 'PENDING_APPROVAL') {
+      throw new ForbiddenException('Sua conta está aguardando aprovação.');
+    }
+
+    if (user.accountStatus === 'SUSPENDED') {
+      throw new ForbiddenException('Sua conta foi suspensa.');
     }
 
     return this.buildAuthResponse(user);
@@ -92,6 +104,8 @@ export class AuthService {
       id: user.id,
       email: user.email,
       name: user.name,
+      role: user.role,
+      accountStatus: user.accountStatus,
       establishmentId: user.establishmentId,
       establishment: user.establishment as EstablishmentSummary | null,
     };
@@ -101,13 +115,15 @@ export class AuthService {
     id: string;
     email: string;
     name: string;
+    role: UserRole;
     establishmentId: string | null;
   }): AuthResponse {
-    const payload: JwtPayload = { sub: user.id, email: user.email };
+    const payload: JwtPayload = { sub: user.id, email: user.email, role: user.role };
     const publicUser: AuthUser = {
       id: user.id,
       email: user.email,
       name: user.name,
+      role: user.role,
       establishmentId: user.establishmentId,
     };
 

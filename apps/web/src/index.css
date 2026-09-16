@@ -61,45 +61,27 @@
 }
 
 /* Only tokens the shared brand theme does NOT define.
-   The sidebar is the dark counterweight to the paper background: it reuses
-   the brand theme's dark-mode values so both themes stay in the same family. */
+   Dark-only app — a single :root block, no .dark override. */
 :root {
-    --chart-1: #2f5233;
-    --chart-2: #b08d3e;
-    --chart-3: #4a5a4e;
-    --chart-4: #7d9a80;
-    --chart-5: #d5dacc;
+    --chart-1: var(--color-primary);
+    --chart-2: var(--color-secondary);
+    --chart-3: var(--color-success);
+    --chart-4: var(--color-warning);
+    --chart-5: var(--color-info);
 
     --radius: 0.625rem;
 
-    --sidebar: #1b2b22;
-    --sidebar-foreground: #f0f2ee;
-    --sidebar-primary: #2f5233;
-    --sidebar-primary-foreground: #f0f2ee;
-    /* Era #2c3f31 — apenas 1.32:1 contra --sidebar, o que tornava o item
-       ativo indistinguível dos inativos. Este tom dá 2.54:1 e é reforçado
-       por uma barra dourada de 2px no AppSidebar. */
-    --sidebar-accent: #4e6c55;
-    --sidebar-accent-foreground: #f0f2ee;
-    --sidebar-border: #31463a;
-    --sidebar-ring: #b08d3e;
-}
-
-.dark {
-    --chart-1: #7d9a80;
-    --chart-2: #b08d3e;
-    --chart-3: #b7c2b8;
-    --chart-4: #4a5a4e;
-    --chart-5: #31463a;
-
-    --sidebar: #16221b;
-    --sidebar-foreground: #f0f2ee;
-    --sidebar-primary: #2f5233;
-    --sidebar-primary-foreground: #f0f2ee;
-    --sidebar-accent: #496650;
-    --sidebar-accent-foreground: #f0f2ee;
-    --sidebar-border: #31463a;
-    --sidebar-ring: #b08d3e;
+    --sidebar: var(--bg-surface);
+    --sidebar-foreground: var(--text-primary);
+    --sidebar-primary: var(--color-primary);
+    --sidebar-primary-foreground: var(--bg-strong);
+    /* Fundo do item ativo: --color-primary em opacidade baixa, reforçado por
+       uma barra de 2px (bg-highlight) no AppSidebar — o tom sozinho não
+       sustenta o estado ativo em telas ruins. */
+    --sidebar-accent: color-mix(in srgb, var(--color-primary) 16%, transparent);
+    --sidebar-accent-foreground: var(--text-primary);
+    --sidebar-border: var(--border-color);
+    --sidebar-ring: var(--color-primary);
 }
 
 @layer base {

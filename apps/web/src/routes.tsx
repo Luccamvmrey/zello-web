@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { AdminLayout } from '@/layouts/admin-layout'
 import { AuthLayout } from '@/layouts/auth-layout'
 import { AuthenticatedLayout } from '@/layouts/authenticated-layout'
 import { OnboardingLayout } from '@/layouts/onboarding-layout'
@@ -8,11 +9,14 @@ import { OnboardingPage } from '@/pages/onboarding'
 import { DashboardPage } from '@/pages/dashboard'
 import { SettingsPage } from '@/pages/settings'
 import { SalesPage } from '@/pages/sections'
+import { SolicitationsPlaceholderPage } from '@/pages/solicitations-placeholder'
 import { CollaboratorsPage } from '@/features/collaborators/pages/collaborators-page'
 import { RulesPage } from '@/features/rules/pages/rules-page'
 import { CatalogPage } from '@/features/catalog/pages/catalog-page'
 import { TerminalsPage } from '@/features/terminals/pages/terminals-page'
 import { TerminalDetailPage } from '@/features/terminals/pages/terminal-detail-page'
+import { AdminOverviewPage } from '@/pages/admin-overview'
+import { AdminAccountsPage } from '@/features/admin/pages/admin-accounts-page'
 
 export const router = createBrowserRouter([
   {
@@ -36,8 +40,17 @@ export const router = createBrowserRouter([
       { path: '/catalog', element: <CatalogPage /> },
       { path: '/terminals', element: <TerminalsPage /> },
       { path: '/terminals/:id', element: <TerminalDetailPage /> },
+      { path: '/solicitations', element: <SolicitationsPlaceholderPage /> },
       { path: '/sales', element: <SalesPage /> },
       { path: '/settings', element: <SettingsPage /> },
+    ],
+  },
+  {
+    element: <AdminLayout />,
+    children: [
+      { path: '/admin', element: <AdminOverviewPage /> },
+      { path: '/admin/accounts', element: <AdminAccountsPage /> },
+      { path: '/admin/solicitations', element: <SolicitationsPlaceholderPage /> },
     ],
   },
   { path: '*', element: <Navigate to="/dashboard" replace /> },

@@ -47,12 +47,26 @@ enum SaleStatus {
   FAILED
 }
 
+enum UserRole {
+  ESTABLISHMENT
+  ADMIN
+}
+
+enum AccountStatus {
+  PENDING_APPROVAL
+  ACTIVE
+  SUSPENDED
+}
+
 /// Quem faz login. O Establishment é criado depois, no onboarding.
 model User {
   id           String  @id @default(uuid()) @db.Uuid
   email        String  @unique
   passwordHash String
   name         String
+
+  role          UserRole      @default(ESTABLISHMENT)
+  accountStatus AccountStatus @default(PENDING_APPROVAL)
 
   /// 1:1 por ora. Para virar multi-tenant (1:N), basta remover o @unique.
   establishmentId String?        @unique @db.Uuid

@@ -1,20 +1,18 @@
 import {
+  ClipboardList,
   LayoutDashboard,
   LogOut,
   Menu,
-  Monitor,
-  Receipt,
   Scale,
   Settings,
+  ShieldCheck,
   Tags,
-  Users,
   type LucideIcon,
 } from 'lucide-react'
 import { useState } from 'react'
 import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { BrandMark } from '@repo/ui/brand-mark'
 import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { ThemeToggle } from '@/components/theme-toggle'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/contexts/auth-context'
 
@@ -24,13 +22,17 @@ interface NavItem {
   icon: LucideIcon
 }
 
-const MAIN_NAV: NavItem[] = [
+const ESTABLISHMENT_MAIN_NAV: NavItem[] = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/collaborators', label: 'Colaboradores', icon: Users },
+  { to: '/solicitations', label: 'Solicitações', icon: ClipboardList },
   { to: '/rules', label: 'Regras', icon: Scale },
   { to: '/catalog', label: 'Catálogo', icon: Tags },
-  { to: '/terminals', label: 'Terminais', icon: Monitor },
-  { to: '/sales', label: 'Vendas', icon: Receipt },
+]
+
+const ADMIN_MAIN_NAV: NavItem[] = [
+  { to: '/admin', label: 'Visão Geral', icon: LayoutDashboard },
+  { to: '/admin/accounts', label: 'Contas', icon: ShieldCheck },
+  { to: '/admin/solicitations', label: 'Solicitações', icon: ClipboardList },
 ]
 
 const SETTINGS_NAV: NavItem[] = [
@@ -74,6 +76,8 @@ function SidebarLink({ to, label, icon: Icon, onNavigate }: NavItem & { onNaviga
 function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
+  const isAdmin = user?.role === 'ADMIN'
+  const mainNav = isAdmin ? ADMIN_MAIN_NAV : ESTABLISHMENT_MAIN_NAV
 
   function handleLogout() {
     onNavigate?.()
@@ -84,15 +88,18 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <nav className="flex flex-1 flex-col gap-1 overflow-y-auto px-3">
-        {MAIN_NAV.map((item) => (
+        {mainNav.map((item) => (
           <SidebarLink key={item.to} {...item} onNavigate={onNavigate} />
         ))}
 
-        <hr className="border-sidebar-border my-3" />
-
-        {SETTINGS_NAV.map((item) => (
-          <SidebarLink key={item.to} {...item} onNavigate={onNavigate} />
-        ))}
+        {isAdmin ? null : (
+          <>
+            <hr className="border-sidebar-border my-3" />
+            {SETTINGS_NAV.map((item) => (
+              <SidebarLink key={item.to} {...item} onNavigate={onNavigate} />
+            ))}
+          </>
+        )}
       </nav>
 
       <div className="border-sidebar-border border-t px-3 py-3">
@@ -100,7 +107,6 @@ function SidebarBody({ onNavigate }: { onNavigate?: () => void }) {
           <p className="truncate text-sm font-medium">{user?.name}</p>
           <p className="text-sidebar-foreground/60 truncate text-xs">{user?.email}</p>
         </div>
-        <ThemeToggle className="w-full" />
         <button
           type="button"
           onClick={handleLogout}

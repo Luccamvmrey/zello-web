@@ -1,6 +1,12 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, type ReactNode } from 'react'
-import type { AuthResponse, LoginPayload, MeResponse, RegisterPayload } from '@repo/types'
+import type {
+  AuthResponse,
+  LoginPayload,
+  MeResponse,
+  RegisterPayload,
+  RegisterResponse,
+} from '@repo/types'
 import { api } from '@/lib/api'
 import { clearToken, getToken, setToken } from '@/lib/auth-storage'
 import { AuthContext, ME_QUERY_KEY, type AuthContextValue } from './auth-context'
@@ -26,6 +32,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Semeia o cache para o layout renderizar sem um segundo round-trip.
       queryClient.setQueryData<MeResponse>(ME_QUERY_KEY, {
         ...response.user,
+        // login só sucede para contas ACTIVE — ver auth.service.ts.
+        accountStatus: 'ACTIVE',
         establishment: null,
       })
       return queryClient.invalidateQueries({ queryKey: ME_QUERY_KEY })
@@ -43,10 +51,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const registerMutation = useMutation({
     mutationFn: async (payload: RegisterPayload) => {
-      const { data } = await api.post<AuthResponse>('/auth/register', payload)
+      const { data } = await api.post<RegisterResponse>('/auth/register', payload)
       return data
     },
-    onSuccess: applySession,
   })
 
   const logout = useCallback(() => {
@@ -68,9 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login: async (payload) => {
         await loginMutation.mutateAsync(payload)
       },
-      register: async (payload) => {
-        await registerMutation.mutateAsync(payload)
-      },
+      register: (payload) => registerMutation.mutateAsync(payload),
       logout,
     }
   }, [meQuery.data, meQuery.isPending, loginMutation, registerMutation, logout])
