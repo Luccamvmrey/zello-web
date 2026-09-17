@@ -38,13 +38,11 @@ export function HowItWorks() {
     >
       {/* 1. MUDANÇA AQUI: Reduzi a largura de lg:w-[45%] para lg:w-[40%] (ou até 35% se preferir) */}
       <Island className="px-6 py-12 md:px-12 lg:w-[45%]">
-        {/* Adicionei um flex e justify-center caso queira centralizar verticalmente no futuro, 
-            mas o sticky vai manter ele no topo durante o scroll */}
         <div className="lg:sticky lg:top-16">
-          <h2 className="text-[clamp(1.6rem,3.2vw,2.8rem)] font-bold leading-tight tracking-tight">
+          <h2 className="text-[clamp(1.6rem,3.2vw,2.8rem)] font-bold leading-tight tracking-tight text-end">
             Como funciona<span className="text-primary">?</span>
           </h2>
-          <p className="mt-4 text-[clamp(0.875rem,1.1vw,1.05rem)] text-muted-foreground">
+          <p className="mt-4 text-[clamp(0.875rem,1.1vw,1.05rem)] text-muted-foreground text-end">
             Veja passo a passo como isso é possível.
           </p>
         </div>

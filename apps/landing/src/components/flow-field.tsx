@@ -6,7 +6,7 @@ import { simplex3 } from "@/lib/simplex-noise"
 const FIELD_SCALE = 1 / 20
 /** Terceira dimensão do noise = tempo. Lento de propósito. */
 const TIME_STEP = 0.0005
-const CONNECT_DISTANCE = 120
+const CONNECT_DISTANCE = 130
 const CONNECT_DISTANCE_SQ = CONNECT_DISTANCE * CONNECT_DISTANCE
 /** ~30fps: o movimento é lento demais para justificar 60. */
 const FRAME_MS = 1000 / 30
@@ -14,9 +14,9 @@ const FRAME_MS = 1000 / 30
    quase toda a página. Nos valores originais (raio 1.5, alphas 0.15 / 0.08 /
    0.02) ele sumia atrás delas. O raio e a espessura importam tanto quanto o
    alpha: feição fina demais o blur apaga, por mais opaca que seja. */
-const PARTICLE_RADIUS = 2.5
-const LINE_WIDTH = 0.8
-const PARTICLE_ALPHA = 0.42
+const PARTICLE_RADIUS = 3.6
+const LINE_WIDTH = 1.2
+const PARTICLE_ALPHA = 0.65
 const LINE_ALPHA_NEAR = 0.22
 const LINE_ALPHA_FAR = 0.06
 const MIN_SPEED = 0.3
@@ -113,8 +113,8 @@ export function FlowField() {
       for (const particle of particles) {
         const angle =
           simplex3(particle.x * FIELD_SCALE, particle.y * FIELD_SCALE, time) * Math.PI * 2
-        particle.x += Math.cos(angle) * (particle.speed * particle.z)
-        particle.y += Math.sin(angle) * (particle.speed * particle.z)
+        particle.x += Math.cos(angle) * (particle.speed * particle.z);
+        particle.y += Math.sin(angle) * (particle.speed * particle.z);
 
         // Wrap-around nas quatro bordas: o campo não tem margem.
         if (particle.x < -MARGIN) {
